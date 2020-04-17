@@ -1,3 +1,11 @@
 * Rebuild X in Tailwind
 I believe the best way to learn any programming language/library/framework is by building things.
 So this repo is my playground to learn [[https://tailwindcss.com/][Tailwind CSS]].
+
+- [X] GitLab Pipelines
+  + [[https://yiming.dev/rebuild-x-with-tailwind/public/gitlab.html][My rebuild]] ([[file:public/gitlab.html][Source]]): [[file:screenshot/gitlab.png]]
+  + [[https://gitlab.com/gitlab-org/gitlab/pipelines?scope=finished&page=1][Original]]: [[file:screenshot/gitlab_orig.png]]
+- [ ] Twitter
+- [ ] GitHub Activities
+- [ ] Zhihu
+- [ ] Douban
