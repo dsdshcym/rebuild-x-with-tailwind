@@ -9,3 +9,5 @@ So this repo is my playground to learn [[https://tailwindcss.com/][Tailwind CSS]
 - [ ] GitHub Activities
 - [ ] Zhihu
 - [ ] Douban
+
+Thanks @adamwathan for his [[https://www.youtube.com/playlist?list=PL7CcGwsqRpSMgVc5NxXUpqmGOS9s1YrWF][Building Interfaces with Tailwind CSS]] YouTube series.
