@@ -1,0 +1,2611 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rebuilding GitLab Merge Request Page with Tailwind</title>
+    <link rel="stylesheet" href="build/tailwind.css" />
+  </head>
+  <body class="leading-tight">
+    <nav
+      class="bg-indigo-900 flex justify-between py-1 px-2 text-indigo-200 sticky top-0"
+    >
+      <div class="flex">
+        <a
+          class="items-center hover:bg-blue-800 rounded flex py-1 px-2"
+          href="#"
+        >
+          <svg class="tanuki-logo animate h-6 w-6" viewBox="0 0 36 36">
+            <path
+              class="tanuki-shape tanuki-left-ear"
+              fill="#e24329"
+              d="M2 14l9.38 9v-9l-4-12.28c-.205-.632-1.176-.632-1.38 0z"
+              style="scroll-behavior: unset;"
+            ></path>
+            <path
+              class="tanuki-shape tanuki-right-ear"
+              fill="#e24329"
+              d="M34 14l-9.38 9v-9l4-12.28c.205-.632 1.176-.632 1.38 0z"
+              style="scroll-behavior: unset;"
+            ></path>
+            <path
+              class="tanuki-shape tanuki-nose"
+              fill="#e24329"
+              d="M18,34.38 3,14 33,14 Z"
+              style="scroll-behavior: unset;"
+            ></path>
+            <path
+              class="tanuki-shape tanuki-left-eye"
+              fill="#fc6d26"
+              d="M18,34.38 11.38,14 2,14 6,25Z"
+              style="scroll-behavior: unset;"
+            ></path>
+            <path
+              class="tanuki-shape tanuki-right-eye"
+              fill="#fc6d26"
+              d="M18,34.38 24.62,14 34,14 30,25Z"
+              style="scroll-behavior: unset;"
+            ></path>
+            <path
+              class="tanuki-shape tanuki-left-cheek"
+              fill="#fca326"
+              d="M2 14L.1 20.16c-.18.565 0 1.2.5 1.56l17.42 12.66z"
+              style="scroll-behavior: unset;"
+            ></path>
+            <path
+              class="tanuki-shape tanuki-right-cheek"
+              fill="#fca326"
+              d="M34 14l1.9 6.16c.18.565 0 1.2-.5 1.56L18 34.38z"
+              style="scroll-behavior: unset;"
+            ></path>
+          </svg>
+          <span class="text-lg tracking-tight ml-2 text-white">GitLab</span>
+        </a>
+
+        <ul class="items-center flex ml-4">
+          <li>
+            <button
+              type="button"
+              class="hover:bg-blue-800 rounded flex text-xs font-semibold justify-between py-2 px-2 hover:text-white"
+            >
+              Projects
+              <svg fill="currentColor" viewBox="0 0 20 20" class="h-4 w-4">
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="hover:bg-blue-800 rounded flex text-xs font-semibold justify-between py-2 px-2 hover:text-white"
+            >
+              Groups
+              <svg fill="currentColor" viewBox="0 0 20 20" class="h-4 w-4">
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="hover:bg-blue-800 rounded flex text-xs font-semibold justify-between py-2 px-2 hover:text-white"
+            >
+              More
+              <svg fill="currentColor" viewBox="0 0 20 20" class="h-4 w-4">
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="items-center flex">
+        <button
+          data-tippy-content="New..."
+          class="items-center hover:bg-blue-800 rounded flex px-1 py-2 hover:text-white"
+          type="button"
+        >
+          <svg fill="currentColor" viewBox="0 0 20 20" class="h-4 w-4">
+            <path
+              fill-rule="evenodd"
+              d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          <svg fill="currentColor" viewBox="0 0 20 20" class="h-4 w-4">
+            <path
+              fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+
+        <div
+          class="flex items-center ml-2 bg-blue-800 rounded py-2 px-2 focus-within:bg-white"
+        >
+          <input
+            placeholder="Search or jump to..."
+            class="placeholder-blue-200 bg-transparent text-sm"
+          />
+          <svg fill="currentColor" viewBox="0 0 20 20" class="w-4 h-4">
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+
+        <div class="flex ml-3">
+          <button
+            data-tippy-content="Issues"
+            class="items-center hover:bg-blue-800 rounded flex py-2 px-2 hover:text-white"
+            type="button"
+          >
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              viewBox="0 0 24 24"
+              class="h-4 w-4"
+            >
+              <path
+                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+              ></path>
+            </svg>
+            <span
+              class="bg-green-500 rounded-full text-xs font-semibold -mx-1 px-1 text-white"
+            >
+              29
+            </span>
+          </button>
+          <button
+            data-tippy-content="Merge Requests"
+            class="items-center hover:bg-blue-800 rounded flex ml-1 py-2 px-2 hover:text-white"
+            type="button"
+          >
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              viewBox="0 0 24 24"
+              class="h-4 w-4"
+            >
+              <path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+            </svg>
+          </button>
+          <button
+            data-tippy-content="To-Do List"
+            class="items-center hover:bg-blue-800 rounded flex ml-1 py-2 px-2 hover:text-white"
+            type="button"
+          >
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              viewBox="0 0 24 24"
+              class="h-4 w-4"
+            >
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span
+              class="bg-blue-600 rounded-full text-xs font-semibold -mx-1 px-1 text-white"
+            >
+              5
+            </span>
+          </button>
+        </div>
+        <button
+          class="items-center hover:bg-blue-800 rounded flex ml-1 py-1 px-2 hover:text-white"
+          type="button"
+        >
+          <svg fill="currentColor" viewBox="0 0 20 20" class="h-5 w-5">
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          <svg fill="currentColor" viewBox="0 0 20 20" class="h-4 w-4">
+            <path
+              fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+        <button
+          class="group items-center hover:bg-blue-800 rounded flex py-1 px-2"
+          type="button"
+        >
+          <img
+            class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+            alt="Avatar"
+            src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+          />
+
+          <svg fill="currentColor" viewBox="0 0 20 20" class="h-4 w-4">
+            <path
+              fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+    <div
+      class="h-full bg-pink-100 border-gray-300 border-r overflow-y-scroll fixed"
+    >
+      <div class="flex flex-col mb-20 w-56">
+        <a class="items-center hover:bg-pink-200 flex py-3 px-3" href="#">
+          <img
+            alt="Project Logo"
+            src="https://www.logaster.com/blog/wp-content/uploads/2018/05/LogoMakr.png"
+            class="bg-white shadow-xs h-10 w-10"
+          />
+          <span class="text-sm font-semibold ml-2 text-gray-900">
+            Project Name
+          </span>
+        </a>
+
+        <div class="flex flex-col overflow-y-scroll">
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                ></path>
+              </svg>
+              <span class="ml-2">Project overview</span>
+            </a>
+          </div>
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              <span class="ml-2">Repository</span>
+            </a>
+          </div>
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                ></path>
+              </svg>
+              <span class="ml-2">Issues</span>
+            </a>
+          </div>
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+              </svg>
+              <span class="ml-2">Merge Requests</span>
+            </a>
+          </div>
+          <div
+            class="border-indigo-800 border-l-4"
+            style="background-color: #f0f0f0;"
+          >
+            <div>
+              <a
+                class="items-center hover:bg-pink-200 flex text-sm font-semibold leading-relaxed py-4 px-4 text-indigo-800"
+                href="#"
+              >
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                >
+                  <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+                <span class="ml-2">CI / CD</span>
+              </a>
+            </div>
+            <div class="flex flex-col mb-2">
+              <a
+                class="hover:bg-pink-200 text-sm font-semibold leading-relaxed py-2 px-10 text-indigo-800"
+                href="#"
+                style="background-color: #e7e7e7;"
+              >
+                Pipelines
+              </a>
+              <a
+                class="hover:bg-pink-200 text-sm leading-relaxed py-2 px-10 text-gray-700"
+                href="#"
+              >
+                Jobs
+              </a>
+              <a
+                class="hover:bg-pink-200 text-sm leading-relaxed py-2 px-10 text-gray-700"
+                href="#"
+              >
+                Schedules
+              </a>
+            </div>
+          </div>
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M8 17a5 5 0 01-.916-9.916 5.002 5.002 0 019.832 0A5.002 5.002 0 0116 17m-7-5l3-3m0 0l3 3m-3-3v12"
+                ></path>
+              </svg>
+              <span class="ml-2">Operations</span>
+            </a>
+          </div>
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                <path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+              </svg>
+              <span class="ml-2">Analytics</span>
+            </a>
+          </div>
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              <span class="ml-2">Wiki</span>
+            </a>
+          </div>
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                ></path>
+              </svg>
+              <span class="ml-2">Snippets</span>
+            </a>
+          </div>
+          <div class="border-transparent hover:border-pink-200 border-l-4">
+            <a
+              class="items-center hover:bg-pink-200 flex text-sm leading-relaxed py-4 px-4 text-gray-700 hover:text-gray-900"
+              href="#"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                ></path>
+              </svg>
+              <span class="ml-2">Members</span>
+            </a>
+          </div>
+          <div class="fixed bottom-0">
+            <a
+              href="#"
+              class="flex items-center w-56 px-4 py-3 text-sm leading-relaxed text-gray-700 bg-pink-100 border-r border-transparent shadow hover:bg-pink-200 hover:text-gray-900"
+            >
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="3"
+                viewBox="0 0 24 24"
+                class="w-4 h-4"
+              >
+                <path d="M15 19l-7-7 7-7"></path>
+              </svg>
+              <span class="ml-2">Collapse sidebar</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pl-56">
+      <div class="px-4">
+        <div
+          class="flex items-center py-4 text-xs text-gray-700 border-b border-gray-300"
+        >
+          <div class="flex items-center">
+            <img
+              src="https://www.logaster.com/blog/wp-content/uploads/2018/05/LogoMakr.png"
+              alt=""
+              class="object-cover w-4 h-4 rounded-full shadow-sm"
+            />
+            <a href="#" class="ml-1 leading-5 hover:underline">group</a>
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              class="w-2 h-2 mx-2"
+            >
+              <path d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          <div class="flex items-center">
+            <img
+              src="https://www.logaster.com/blog/wp-content/uploads/2018/05/LogoMakr.png"
+              alt=""
+              class="object-cover w-4 h-4 rounded-full shadow-sm"
+            />
+            <a href="#" class="ml-1 leading-5 hover:underline">team</a>
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              class="w-2 h-2 mx-2"
+            >
+              <path d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          <div class="flex items-center">
+            <img
+              src="https://www.logaster.com/blog/wp-content/uploads/2018/05/LogoMakr.png"
+              alt=""
+              class="object-cover w-4 h-4 rounded-full shadow-sm"
+            />
+            <a href="#" class="ml-1 leading-5 hover:underline">project</a>
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              class="w-2 h-2 mx-2"
+            >
+              <path d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          <div class="flex items-center">
+            <a href="#" class="font-semibold leading-5 hover:underline">
+              Pipelines
+            </a>
+          </div>
+        </div>
+        <div class="border-b border-gray-300">
+          <div class="flex items-center justify-between">
+            <div class="flex">
+              <div
+                class="px-2 py-3 border-b-2 border-blue-700 hover:border-gray-400"
+              >
+                <a
+                  class="text-sm font-semibold text-gray-700 hover:text-gray-900"
+                  role="button"
+                >
+                  All
+                  <span class="px-1 py-1 text-xs bg-gray-200 rounded-full">
+                    1,000+
+                  </span>
+                </a>
+              </div>
+              <div
+                class="px-2 py-3 border-b-2 border-transparent hover:border-gray-400"
+              >
+                <a class="text-sm text-gray-700" role="button">
+                  Pending
+                  <span class="px-1 py-1 text-xs bg-gray-200 rounded-full">
+                    0
+                  </span>
+                </a>
+              </div>
+              <div
+                class="px-2 py-3 border-b-2 border-transparent hover:border-gray-400"
+              >
+                <a class="text-sm text-gray-700" role="button">
+                  Running
+                  <span class="px-1 py-1 text-xs bg-gray-200 rounded-full">
+                    0
+                  </span>
+                </a>
+              </div>
+              <div
+                class="px-2 py-3 border-b-2 border-transparent hover:border-gray-400"
+              >
+                <a class="text-sm text-gray-700" role="button">
+                  Finished
+                  <span class="px-1 py-1 text-xs bg-gray-200 rounded-full">
+                    1,000+
+                  </span>
+                </a>
+              </div>
+              <div
+                class="px-2 py-3 border-b-2 border-transparent hover:border-gray-400"
+              >
+                <a class="text-sm text-gray-700" role="button">
+                  Branches
+                </a>
+              </div>
+              <div
+                class="px-2 py-3 border-b-2 border-transparent hover:border-gray-400"
+              >
+                <a class="text-sm text-gray-700 -m" role="button">
+                  Tags
+                </a>
+              </div>
+            </div>
+            <div class="flex">
+              <button
+                class="px-3 py-2 text-sm text-white bg-green-600 border rounded-md"
+                type="button"
+              >
+                Run Pipeline
+              </button>
+              <button
+                class="px-3 py-2 ml-2 text-sm text-black bg-white border rounded-md"
+                type="button"
+              >
+                CI Lint
+              </button>
+            </div>
+          </div>
+        </div>
+        <table class="w-full">
+          <thead class="border-b">
+            <tr>
+              <th class="font-normal text-sm text-gray-700 text-left py-4">
+                Status
+              </th>
+              <th class="font-normal text-sm text-gray-700 text-left py-4">
+                Pipeline
+              </th>
+              <th class="font-normal text-sm text-gray-700 text-left py-4">
+                Triggerer
+              </th>
+              <th class="font-normal text-sm text-gray-700 text-left py-4">
+                Commit
+              </th>
+              <th class="font-normal text-sm text-gray-700 text-left py-4">
+                Stages
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="py-4" style="width: 10%;">
+                <button
+                  class="flex py-1 w-20 justify-center items-center rounded border border-green-600 text-sm text-green-600 hover:bg-green-100 hover:border-700 hover:text-green-700"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="ml-1">passed</span>
+                </button>
+              </td>
+              <td class="w-32">
+                <div class="flex flex-col py-4">
+                  <span class="py-1 text-sm">#12345</span>
+                  <div
+                    class="w-10 leading-4 text-xs text-white text-center align-middle bg-green-600 rounded"
+                  >
+                    latest
+                  </div>
+                </div>
+              </td>
+              <td class="w-32">
+                <a href="#">
+                  <img
+                    class="ml-4 group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                    alt="Avatar"
+                    src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                  />
+                </a>
+              </td>
+              <td class="pr-2 w-64">
+                <div class="flex flex-col">
+                  <div class="flex items-center">
+                    <svg
+                      viewBox="0 0 14 14"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3 text-gray-600 mr-1"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 3a2 2 0 0 1-1 1.732V8c.836-.628 1.874-1 3-1a3.001 3.001 0 0 0 2.921-2.315 2 2 0 1 1 2.02.08A5.001 5.001 0 0 1 8 9a3.001 3.001 0 0 0-2.922 2.315A2 2 0 1 1 3 11.267V4.733A2 2 0 1 1 6 3z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm font-bold hover:underline">
+                      master
+                    </a>
+                    <svg
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1 h-3 w-3 text-gray-600"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.876 8.992a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 0 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 1 1 0 2h-3c-.042 0-.083-.003-.124-.008zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                      ></path>
+                    </svg>
+                    <a href="#" class="text-sm text-blue-700 hover:underline">
+                      234a234e
+                    </a>
+                  </div>
+                  <div class="flex mt-1">
+                    <a href="#">
+                      <img
+                        class="group-hover:border-white border-indigo-200 rounded-full border h-6 w-6"
+                        alt="Avatar"
+                        src="https://secure.gravatar.com/avatar/044e754c62717b285bcfa45888cfaf4f"
+                      />
+                    </a>
+                    <a href="#" class="ml-2 text-sm leading-tighter truncate">
+                      Merge branch 'commit-message-goes-here'
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="max-w-2xl">
+                <div class="flex items-center">
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                  <div class="w-2 border"></div>
+                  <button
+                    class="flex items-center justify-center rounded-full h-6 w-6 border border-green-600 text-green-600 hover:border-2"
+                  >
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="pr-32 w-64">
+                <div class="flex flex-col items-end">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 40 40"
+                      class="h-3 w-3"
+                    >
+                      <g fill="#8F8F8F" fill-rule="evenodd">
+                        <path
+                          d="M29.513 10.134A15.922 15.922 0 0 0 23 7.28V6h2.993C26.55 6 27 5.552 27 5V2a1 1 0 0 0-1.007-1H14.007C13.45 1 13 1.448 13 2v3a1 1 0 0 0 1.007 1H17v1.28C9.597 8.686 4 15.19 4 23c0 8.837 7.163 16 16 16s16-7.163 16-16c0-3.461-1.099-6.665-2.967-9.283l1.327-1.58a2.498 2.498 0 0 0-.303-3.53 2.499 2.499 0 0 0-3.528.315l-1.016 1.212zM20 34c6.075 0 11-4.925 11-11s-4.925-11-11-11S9 16.925 9 23s4.925 11 11 11z"
+                        ></path>
+                        <path
+                          d="M19 21h-4.002c-.552 0-.998.452-.998 1.01v1.98c0 .567.447 1.01.998 1.01h7.004c.274 0 .521-.111.701-.291a.979.979 0 0 0 .297-.704v-8.01c0-.54-.452-.995-1.01-.995h-1.98a.997.997 0 0 0-1.01.995V21z"
+                        ></path>
+                      </g>
+                    </svg>
+                    <span class="ml-2 text-sm text-gray-600">00:03:24</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      class="w-3 h-3 text-gray-600"
+                    >
+                      <path
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <time class="text-sm text-gray-600">10 minutes ago</time>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script>
+      tippy("[data-tippy-content]");
+    </script>
+  </body>
+</html>
